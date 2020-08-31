@@ -11,11 +11,11 @@ const inputReducer = (state, action) => {
         value: action.val,
         isValid: validate(action.val, action.validators),
       };
-      case 'TOUCH':
-        return {
-            ...state,
-           isTouch: true
-          }; 
+    case "TOUCH":
+      return {
+        ...state,
+        isTouch: true,
+      };
     default:
       return state;
   }
@@ -23,26 +23,30 @@ const inputReducer = (state, action) => {
 
 function Input(props) {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: "",
-    isValid: false,
-    isTouch: false
+    value: props.initialValue || "",
+    isValid: props.initialValid || false,
+    isTouch: false,
   });
 
-  const  {id, onInput} = props;
-  const {value, isValid} = inputState;
+  const { id, onInput } = props;
+  const { value, isValid } = inputState;
 
   useEffect(() => {
-      onInput(id, value, isValid)
-  }, [id, value, isValid, onInput])
+    onInput(id, value, isValid);
+  }, [id, value, isValid, onInput]);
   const changeHandler = (e) => {
-    dispatch({ type: "CHANGE", val: e.target.value, validators: props.validators});
+    dispatch({
+      type: "CHANGE",
+      val: e.target.value,
+      validators: props.validators,
+    });
   };
 
   const touchHandler = () => {
-      dispatch({
-          type:"TOUCH"
-      })
-  }
+    dispatch({
+      type: "TOUCH",
+    });
+  };
 
   const element =
     props.element === "input" ? (
