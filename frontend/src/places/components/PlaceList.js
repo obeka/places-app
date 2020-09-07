@@ -12,7 +12,6 @@ function PlaceList(props) {
         <Card>
           <h2>No Places found. Maybe create one.</h2>
           <Button to='/places/new '>Share Place</Button>
-          <button>Share Place</button>
         </Card>
       </div>
     );
@@ -24,12 +23,13 @@ function PlaceList(props) {
         <PlaceItem
           key={place.id}
           id={place.id}
-          image={place.imageUrl}
+          image={place.image}
           title={place.title}
           description={place.description}
           address={place.address}
           creatorId={place.creatorId}
           coordinates={place.location}
+          onDelete={props.onDeletePlace}
         />
       ))}
     </ul>

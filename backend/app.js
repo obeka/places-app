@@ -9,8 +9,19 @@ const app = express();
 //Body parser middleware
 app.use(bodyParser.json());
 
+//CORS middleware
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Allow-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
+
 //Place routes middleware
-app.use("/api/places", placesRoutes);
+app.use("/api/places", placesRoutes); 
 //User routes middleware
 app.use("/api/users", usersRoutes);
 
@@ -29,7 +40,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect('mongodb+srv://omerbkk06:19901992@cluster0.f6uwe.mongodb.net/places?retryWrites=true&w=majority')
+  .connect(
+    "mongodb+srv://omerbkk06:19901992@cluster0.f6uwe.mongodb.net/mern?retryWrites=true&w=majority"
+  )
   .then(() =>
     app.listen(5000, () => console.log("Server started on port 5000"))
   )

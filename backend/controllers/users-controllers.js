@@ -15,7 +15,7 @@ const getUsers = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ user: users.map((u) => u.toObject({ getters: true })) });
+  res.json({ users: users.map((u) => u.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -84,7 +84,10 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged in!" });
+  res.json({
+    message: "Logged in!",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 module.exports = {
