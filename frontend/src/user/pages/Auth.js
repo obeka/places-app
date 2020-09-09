@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import "./Auth.css";
 import Card from "../../shared/components/UIElements/Card";
 import Input from "../../shared/components/FormElements/Input";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import Button from "../../shared/components/FormElements/Button";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
@@ -37,7 +38,6 @@ function Auth() {
 
   const authSubmitHandler = async (e) => {
     e.preventDefault();
-
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
@@ -55,17 +55,15 @@ function Auth() {
       } catch (err) {}
     } else {
       try {
+        const formData = new FormData();
+        formData.append("email", formState.inputs.email.value);
+        formData.append("name", formState.inputs.name.value);
+        formData.append("password", formState.inputs.password.value);
+        formData.append("image", formState.inputs.image.value); // in the backend, fileUpload.single looks for the 'image' key
         const responseData = await sendRequest(
           "http://localhost:5000/api/users/signup",
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData
         );
         auth.login(responseData.user.id);
       } catch (err) {}
@@ -78,12 +76,17 @@ function Auth() {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
     } else {
       setFormData(
-        { ...formState.inputs, name: { value: "", isValid: false } },
+        {
+          ...formState.inputs,
+          name: { value: "", isValid: false },
+          image: { value: null, isValid: false },
+        },
         false
       );
     }
@@ -109,6 +112,10 @@ function Auth() {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && (
+            <ImageUpload id="image" center onInput={inputHandler} errorText='Please provide an image.'/>
+          )}{" "}
+          {/* Same onInput function with other inputs */}
           <Input
             id="email"
             element="input"

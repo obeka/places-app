@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -13,11 +13,12 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 function NewPlace() {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const history = useHistory()
+  const history = useHistory();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -32,6 +33,10 @@ function NewPlace() {
         value: "",
         isValid: false,
       },
+      image: {
+        value: null,
+        isValid: false,
+      },
     },
     false
   );
@@ -39,21 +44,19 @@ function NewPlace() {
   const placeSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      await sendRequest(
-        "http://localhost:5000/api/places",
-        "POST",
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userId,
-        }),
-        { "Content-Type": "application/json" }
-      );
+      const formData = new FormData();
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("address", formState.inputs.address.value);
+      formData.append("creator", auth.userId);
+      formData.append("image", formState.inputs.image.value);
+
+      await sendRequest("http://localhost:5000/api/places", "POST", formData);
       //Redirect user to different page
-      history.push('/')
+      history.push("/");
     } catch (err) {}
   };
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -68,6 +71,7 @@ function NewPlace() {
           errorText="Please enter a valid title"
           onInput={inputHandler}
         />
+
         <Input
           id="description"
           type="textarea"
@@ -84,6 +88,12 @@ function NewPlace() {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid address."
           onInput={inputHandler}
+        />
+        <ImageUpload
+          id="image"
+          center
+          onInput={inputHandler}
+          errorText="Please provide an image."
         />
         <Button type="submit" disabled={!formState.isValid}>
           ADD PLACE

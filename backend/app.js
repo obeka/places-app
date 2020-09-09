@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require('path')
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -8,6 +11,9 @@ const usersRoutes = require("./routes/users-routes");
 const app = express();
 //Body parser middleware
 app.use(bodyParser.json());
+
+//Middleware for static folders like images
+app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 
 //CORS middleware
 app.use((req, res, next) => {
@@ -21,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 //Place routes middleware
-app.use("/api/places", placesRoutes); 
+app.use("/api/places", placesRoutes);
 //User routes middleware
 app.use("/api/users", usersRoutes);
 
@@ -31,6 +37,12 @@ app.use((req, res, nex) => {
 });
 
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, err => { // path relates the image path, unlink remove the image from disc
+      console.log(err);
+    });
+  }
+
   if (res.headerSent) {
     return next(error);
   }
