@@ -69,7 +69,10 @@ function UpdatePlace() {
           description: formState.inputs.description.value,
           creator: auth.userId,
         }),
-        { "Content-Type": "application/json" }
+        {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
+        }
       );
       //Redirect user to different page
       history.push(`/${auth.userId}/places`);
