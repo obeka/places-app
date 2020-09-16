@@ -5,7 +5,6 @@ import "./Map.css";
 
 function Map(props) {
   const mapRef = useRef(); 
-  console.log(mapRef);
   mapboxgl.accessToken =
     "pk.eyJ1Ijoib21lcmJrazA2IiwiYSI6ImNrNThqeGRxbDBlcDIzam11eDIzaDRsamYifQ.P8GSW1O3dRj59x7v9l7FqA";
 

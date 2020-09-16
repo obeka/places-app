@@ -31,7 +31,7 @@ app.use("/api/places", placesRoutes);
 //User routes middleware
 app.use("/api/users", usersRoutes);
 
-app.use((req, res, nex) => {
+app.use((req, res, next) => {
   const error = new HttpError("Couldn't find this route.", 404);
   throw error;
 });
@@ -53,7 +53,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://omerbkk06:19901992@cluster0.f6uwe.mongodb.net/mern?retryWrites=true&w=majority"
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.f6uwe.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() =>
     app.listen(5000, () => console.log("Server started on port 5000"))
