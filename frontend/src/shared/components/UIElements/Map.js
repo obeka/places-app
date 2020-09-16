@@ -16,7 +16,7 @@ function Map(props) {
       container: mapRef.current,
       style: "mapbox://styles/mapbox/streets-v11", // stylesheet location
       center, // starting position [lng, lat]
-      zoom, // starting zoom
+      zoom:12, // starting zoom
     });
     var marker = new mapboxgl.Marker().setLngLat(center).addTo(map);
   }, [center, zoom]);
