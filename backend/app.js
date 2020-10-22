@@ -4,6 +4,7 @@ const path = require('path')
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const HttpError = require("./models/http-error");
 
 const placesRoutes = require("./routes/places-routes");
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 //Middleware for static folders like images
 app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 
-//CORS middleware
+/* //CORS middleware
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -24,7 +25,9 @@ app.use((req, res, next) => {
   );
   res.setHeader("Allow-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   next();
-});
+}); */
+
+app.use(cors())
 
 //Place routes middleware
 app.use("/api/places", placesRoutes);
@@ -53,9 +56,9 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.f6uwe.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.f6uwe.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() =>
-    app.listen(5000, () => console.log("Server started on port 5000"))
+    app.listen(process.env.PORT || 5000, () => console.log('Server started.'))
   )
-  .catch();
+  .catch(e => console.log(e));

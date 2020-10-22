@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 
 import { validate } from "../../utils/validators";
+import SearchBox from "../Navigation/SearchBox";
 import "./Input.css";
 
 const inputReducer = (state, action) => {
@@ -34,6 +35,7 @@ function Input(props) {
   useEffect(() => {
     onInput(id, value, isValid);
   }, [id, value, isValid, onInput]);
+
   const changeHandler = (e) => {
     dispatch({
       type: "CHANGE",
@@ -58,7 +60,7 @@ function Input(props) {
         onBlur={touchHandler}
         value={inputState.value}
       />
-    ) : (
+    ) :  (
       <textarea
         id={props.id}
         rows={props.rows || 3}
@@ -66,7 +68,7 @@ function Input(props) {
         onBlur={touchHandler}
         value={inputState.value}
       />
-    );
+    ) 
   return (
     <div
       className={`form-control ${

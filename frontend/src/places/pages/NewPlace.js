@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
@@ -14,6 +14,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ImageUpload from "../../shared/components/FormElements/ImageUpload";
+import SearchBox from "../../shared/components/Navigation/SearchBox";
 
 function NewPlace() {
   const auth = useContext(AuthContext);
@@ -51,13 +52,26 @@ function NewPlace() {
       formData.append("creator", auth.userId);
       formData.append("image", formState.inputs.image.value);
 
-      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places`, "POST", formData, {
-        Authorization: 'Bearer ' + auth.token
-      });
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/places`,
+        "POST",
+        formData,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
       //Redirect user to different page
       history.push("/");
     } catch (err) {}
   };
+
+  useEffect(() => {
+    document
+      .querySelector(".mapboxgl-ctrl-geocoder--input")
+      .addEventListener("change", (e) => {
+        inputHandler('address', e.target.value, true)
+      });
+  }, [inputHandler]);
 
   return (
     <React.Fragment>
@@ -73,24 +87,16 @@ function NewPlace() {
           errorText="Please enter a valid title"
           onInput={inputHandler}
         />
-
         <Input
           id="description"
-          type="textarea"
+          type="text"
+          element="textarea"
           label="Description"
           validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter a valid description (at least 5 characters)."
           onInput={inputHandler}
         />
-        <Input
-          id="address"
-          type="input"
-          label="Address"
-          element="input"
-          validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid address."
-          onInput={inputHandler}
-        />
+        <SearchBox />
         <ImageUpload
           id="image"
           center

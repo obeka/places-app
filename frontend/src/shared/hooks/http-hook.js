@@ -23,7 +23,7 @@ export const useHttpClient = () => {
 
         activeHttpRequests.current = activeHttpRequests.current.filter(
           (reqCtrl) => reqCtrl !== httpAbortCtrl
-        );
+        );// the request is completed, so we can abort it or simply remove from array
 
         if (!response.ok) {
           throw new Error(responseData.message);
