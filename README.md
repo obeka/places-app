@@ -59,14 +59,12 @@ To-do list:
 ![Example screenshot](https://i.postimg.cc/JnNWCyNX/1-Mainpage.png)
 ![Example screenshot](https://i.postimg.cc/7hR9B95n/2-Placepage.png)
 ![Example screenshot](https://i.postimg.cc/9QZbpGCy/map.png)
-On mobile : 
 
-![Example screenshot](https://i.postimg.cc/y8mh9syP/4-mobile-users.png)
-![Example screenshot](https://i.postimg.cc/c1vb3tgB/5-mobile.png)
-
+# On mobile : 
+![Example screenshot](https://i.postimg.cc/y8mh9syP/4-mobile-users.png) ![Example screenshot](https://i.postimg.cc/c1vb3tgB/5-mobile.png)
 
 ## Inspiration
 Based on Maximilian Schwarzmüller's Udemy Course on MERN. [Link to course](https://www.udemy.com/course/react-nodejs-express-mongodb-the-mern-fullstack-guide/)
 
 ## Contact
-	:mailbox_with_mail: You can send me email : omerbkk06@gmail.com 	:mailbox_with_mail:
+:mailbox_with_mail: You can send me email : omerbkk06@gmail.com :mailbox_with_mail:
